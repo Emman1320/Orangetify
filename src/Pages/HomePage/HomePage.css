@@ -1,0 +1,161 @@
+.App {
+  /* font-family: "kalam", cursive; */
+  /* font-family: "Montserrat", sans-serif !important; */
+  font-family: "Red Hat Display", sans-serif;
+}
+.header {
+  text-align: center;
+}
+.Navbar {
+  background-color: #1e56a6 !important;
+  background-size: cover;
+}
+.theMainPage {
+  margin: 4rem auto 6rem auto;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+.buttonBackground {
+  z-index: -1;
+  position: absolute;
+  top: -29%;
+  left: -26%;
+  opacity: 0.3;
+}
+.beefyButton {
+  width: 250px !important;
+  height: 250px !important;
+  position: relative;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px !important;
+  font-size: 34px !important;
+  text-transform: capitalize !important;
+  overflow: hidden;
+  background-color: #1e56a6 !important;
+  color: white !important;
+  transition: box-shadow 0.4s ease !important;
+  /* background-image: url("../../assets/button\ abstract.png"); */
+  /* backdrop-filter: opacity(0.4); */
+
+  /* background-position: 15% 30%;
+  background-repeat: none; */
+}
+.beefyButton:hover {
+  box-shadow: rgba(149, 157, 165, 0.8) 0px 8px 24px !important;
+}
+
+.todoList {
+  width: 60%;
+  /* max-height: 351px; */
+  overflow: hidden;
+  margin: 2rem auto 5rem auto;
+  border-radius: 5px;
+  padding: 1rem 1rem 1px 1rem;
+  background-color: #4d96ff6d;
+  box-shadow: rgb(0 0 0 / 20%) 0px 3px 1px -2px,
+    rgb(0 0 0 / 14%) 0px 2px 2px 0px, rgb(0 0 0 / 12%) 0px 1px 5px 0px;
+}
+.todoItem {
+  background-color: #d5e6fe;
+  padding: 0.2rem;
+  border-radius: 5px;
+  position: relative;
+  font-size: 16px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 1;
+  transition: opacity 0.3s ease, height 0.3s ease 0.3s, margin 0.3s ease 0.3s,
+    padding 0.5s ease 0.5s;
+  height: 48px;
+}
+.deleteTodo {
+  opacity: 0;
+  height: 0px;
+  margin: 0;
+  padding: 0;
+}
+.todoText {
+  display: flex;
+  align-items: center;
+}
+.strike-out {
+  position: absolute;
+  top: 0%;
+  /* border: 2px solid black; */
+  width: 99%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.strike-out > div {
+  /* margin: auto; */
+  height: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  width: 0%;
+  border-radius: 2px;
+  transition: width 1s cubic-bezier(0.02, 1.12, 0.58, 1);
+}
+.tasksToBeCompleted h2 {
+  text-align: center;
+}
+.tasksToBeCompleted ul {
+  width: 20%;
+  margin: auto;
+}
+
+.todoList::-webkit-scrollbar {
+  width: 5px;
+}
+
+.todoList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.todoList::-webkit-scrollbar-thumb {
+  background: rgba(95, 95, 95, 0.267);
+  border-radius: 4px;
+}
+
+.todoList::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+.todoStatus {
+  text-align: center;
+  animation: expandTodos 0.3s ease forwards;
+}
+.addTodo {
+  padding: 0.2rem 0.7rem 0.2rem 5px;
+  background-color: #4d96ff7a;
+}
+.addTodo .todoCustomInput {
+  background: transparent;
+  font-family: "kalam", cursive;
+  border: 0;
+  font-size: 16px;
+  padding: 0.2rem;
+  width: 100%;
+}
+
+.addTodo input:focus {
+  outline: 0;
+}
+.addTodo button {
+  width: 45px;
+  height: 45px;
+  color: black;
+}
+.addTodo svg {
+  /* margin-right: 10px; */
+}
+
+@keyframes expandTodos {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 35px;
+  }
+}

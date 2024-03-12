@@ -15,6 +15,7 @@ import { spaceActions } from "./store/constants";
 import Layout from "./components/Layout";
 import Login from "./Pages/LoginPage/Login";
 import Signup from "./Pages/LoginPage/Signup";
+import AnalyticsPage from "./Pages/AnalyticsPage/AnalyticsPage";
 
 const theme = createTheme({
   palette: {
@@ -76,6 +77,16 @@ function App() {
               </Layout>
             }
           />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/analytics"
+            exact
+            element={
+              <Layout>
+                <AnalyticsPage />
+              </Layout>
+            }
+          />
           <Route
             path="/settings"
             exact
@@ -85,22 +96,8 @@ function App() {
               </Layout>
             }
           >
-            <Route
-              path=""
-              element={
-                <Layout>
-                  <AccountSettings />
-                </Layout>
-              }
-            />
-            <Route
-              path="todo"
-              element={
-                <Layout>
-                  <TodoSettings />
-                </Layout>
-              }
-            />
+            <Route path="" element={<AccountSettings />} />
+            <Route path="todo" element={<TodoSettings />} />
           </Route>
         </Routes>
       </Router>

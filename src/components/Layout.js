@@ -60,12 +60,8 @@ ScrollTop.propTypes = {
 export default function Layout(props) {
   return (
     <React.Fragment>
-      <CssBaseline />
       <Navbar />
-      <Toolbar id="back-to-top-anchor" />
-      <Container>
-        <Box sx={{ my: 2 }}>{props.children}</Box>
-      </Container>
+      <Box>{props.children}</Box>
       <ScrollTop {...props}>
         <Fab size="small" aria-label="scroll back to top">
           <KeyboardArrowUpIcon />

@@ -46,7 +46,7 @@
 }
 
 .todoList {
-  width: 60%;
+  width: 70%;
   /* max-height: 351px; */
   overflow: hidden;
   margin: 2rem auto 5rem auto;
@@ -132,7 +132,7 @@
 }
 .addTodo .todoCustomInput {
   background: transparent;
-  font-family: "kalam", cursive;
+  font-family: "Red Hat Display", sans-serif;
   border: 0;
   font-size: 16px;
   padding: 0.2rem;

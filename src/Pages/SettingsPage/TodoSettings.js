@@ -1,25 +1,34 @@
-import {
-  Box,
-  Button,
-  Card,
-  CircularProgress,
-  Grid,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
-import { Add, Delete } from "@mui/icons-material";
-import { spaceActions } from "../../store/constants";
-import { SpaceContext } from "../../store/space-provider";
+import { Button, CircularProgress, Grid, Typography } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Add, Clear, Edit } from "@mui/icons-material";
 import CategoryInput from "./CategoryInput";
 import { db } from "../../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 
+export const destructuredCategoryArray = (data) => {
+  const array = [];
+  for (const category in data) {
+    array.push({
+      name: category,
+      points: data[category].points,
+      totalTimeSpent: data[category].totalTimeSpent,
+      totalPoints: data[category].totalPoints,
+    });
+  }
+  return array;
+};
+
 const TodoSettings = () => {
   const [categoryArray, setCategoryArray] = useState([]);
+  const categoryArrayBackupRef = useRef([]);
+  const firebaseRef = useRef({
+    categories: doc(db, "categories", "emman"),
+    todos: doc(db, "todos", "emman"),
+  });
+
   const [touched, setTouched] = useState();
   const [loading, setLoading] = useState(false);
+  const [editable, setEditable] = useState(false);
   const categoryNamePattern = /^(?!\s*$).+/;
   const categoryPointsPattern = /^-?\d+$/;
   const isValid = () => {
@@ -27,12 +36,13 @@ const TodoSettings = () => {
       categoryArray.filter((category) => {
         return (
           categoryNamePattern.test(category.name) &&
-          categoryPointsPattern.test(category.points)
+          categoryPointsPattern.test(category.points) &&
+          categoryArray.filter((e) => e.name === category.name).length === 1
         );
       }).length === categoryArray.length
     );
   };
-  let allowSubmit = touched && isValid();
+  let allowSubmit = touched && editable && isValid();
   const addCategory = () => {
     setCategoryArray((prev) => [...prev, { name: "", points: "", new: true }]);
   };
@@ -45,37 +55,70 @@ const TodoSettings = () => {
     });
   };
   const removeCategory = (index, e) => {
+    if (!touched) setTouched(true);
     setCategoryArray((prev) => {
       const updatedArray = [...prev];
       updatedArray.splice(index, 1);
-      const categoryRef = doc(db, "categories", "emman");
-      updateDoc(categoryRef, {
-        categories: updatedArray,
-      });
       return updatedArray;
     });
   };
 
+  const toggleEditable = () => {
+    setEditable((prevIsEditable) => {
+      if (prevIsEditable) {
+        setCategoryArray(categoryArrayBackupRef.current);
+      }
+      return !prevIsEditable;
+    });
+  };
+  const structuredCategoryArray = () => {
+    const data = {};
+    categoryArray.forEach((category) => {
+      data[category.name] = {
+        points: +category.points,
+        totalTimeSpent: category.totalTimeSpent || 0,
+        totalPoints: category.totalPoints || 0,
+      };
+    });
+    return data;
+  };
   const onSubmit = async () => {
     setLoading(true);
     try {
       if (isValid()) {
-        const categoryRef = doc(db, "categories", "emman");
-        await updateDoc(categoryRef, {
-          categories: categoryArray,
+        await updateDoc(
+          firebaseRef.current.categories,
+          structuredCategoryArray()
+        );
+        await getDoc(firebaseRef.current.todos).then((snapshot) => {
+          if (snapshot.exists()) {
+            const data = snapshot.data();
+            const todos = data.todoList || [];
+            const categoryNames = categoryArray.map((e) => e.name);
+            const updatedTodos = todos.filter((todo) =>
+              categoryNames.includes(todo.category)
+            );
+            if (updatedTodos.length !== todos.length) {
+              updateDoc(firebaseRef.current.todos, {
+                todoList: updatedTodos,
+              });
+            }
+          }
         });
+        categoryArrayBackupRef.current = categoryArray;
         setTouched(false);
+        setEditable(false);
       }
     } catch (error) {}
     setLoading(false);
   };
+
   useEffect(() => {
-    const categoryRef = doc(db, "categories", "emman");
-    getDoc(categoryRef).then((snapshot) => {
+    getDoc(firebaseRef.current.categories).then((snapshot) => {
       if (snapshot.exists()) {
         const data = snapshot.data();
-        console.log(data);
-        setCategoryArray(data.categories || []);
+        categoryArrayBackupRef.current = destructuredCategoryArray(data);
+        setCategoryArray(destructuredCategoryArray(data));
       } else {
         setCategoryArray([]);
       }
@@ -91,13 +134,39 @@ const TodoSettings = () => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button
-            onClick={onSubmit}
-            disabled={!allowSubmit}
-            variant="contained"
-          >
-            {loading ? <CircularProgress color="inherit" size="20px" /> : "submit"}
-          </Button>
+          <Grid container gap={2}>
+            <Grid item>
+              <Button
+                disabled={!editable}
+                onClick={addCategory}
+                variant="contained"
+              >
+                <Add />
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={toggleEditable}
+                color={editable ? "error" : "primary"}
+                variant="contained"
+              >
+                {editable ? <Clear /> : <Edit />}
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                onClick={onSubmit}
+                disabled={!allowSubmit}
+                variant="contained"
+              >
+                {loading ? (
+                  <CircularProgress color="inherit" size="20px" />
+                ) : (
+                  "submit"
+                )}
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       <div className="todo-category-list-container">
@@ -114,18 +183,12 @@ const TodoSettings = () => {
                 categoryPointsPattern,
                 onEnterValue,
                 removeCategory,
+                disabled: !editable,
               }}
             />
           ))
         )}
       </div>
-      <Button
-        onClick={addCategory}
-        className="todo-addcategory-button"
-        variant="contained"
-      >
-        <Add /> Add Category
-      </Button>
     </div>
   );
 };

@@ -45,14 +45,15 @@ IconContainer.propTypes = {
   value: PropTypes.number.isRequired,
 };
 
-export default function SmileyRating() {
-  const onRateEmotionalStatus = (e) => {
-    console.log(e.target.value);
-  };
+export default function SmileyRating({
+  onRateEmotionalStatus,
+  emotionalStatus,
+}) {
   return (
     <StyledRating
       name="highlight-selected-only"
       onChange={onRateEmotionalStatus}
+      value={emotionalStatus}
       IconContainerComponent={IconContainer}
       getLabelText={(value) => customIcons[value].label}
       highlightSelectedOnly

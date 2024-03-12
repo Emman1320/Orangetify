@@ -11,9 +11,7 @@ import {
 } from "@mui/material";
 import { ExitToApp, Person } from "@mui/icons-material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import { Outlet, Route, Router, Routes, useNavigate } from "react-router-dom";
-import AccountSettings from "./AccountSettings";
-import TodoSettings from "./TodoSettings";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const SettingsPage = (props) => {
   const navigate = useNavigate();
@@ -22,7 +20,12 @@ const SettingsPage = (props) => {
       <Paper sx={{ display: "flex", height: "100%" }}>
         <div className="settings-sidemenu">
           <MenuList>
-            <MenuItem onClick={() => {navigate("/settings")}} sx={{ py: 1 }}>
+            <MenuItem
+              onClick={() => {
+                navigate("/settings");
+              }}
+              sx={{ py: 1 }}
+            >
               <ListItemIcon>
                 <Person fontSize="small" />
               </ListItemIcon>

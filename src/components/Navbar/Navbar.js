@@ -8,20 +8,18 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import SettingsIcon from "@mui/icons-material/Settings";
+import InsightsIcon from "@mui/icons-material/Insights";
 import ReviewsIcon from "@mui/icons-material/Reviews";
 import { useNavigate } from "react-router-dom";
+import { Deblur } from "@mui/icons-material";
 
-// const pagesIcon = [<ReviewsIcon />, <SettingsIcon />];
-// const pagesTitle = ["Rating", "Settings"];
 const pageDetails = [
+  { icon: <InsightsIcon />, title: "Analytics", href: "/analytics" },
   { icon: <ReviewsIcon />, title: "Rating", href: "/rating" },
   { icon: <SettingsIcon />, title: "Settings", href: "/settings" },
-  
 ];
 const settings = ["Profile", "Logout"];
 
@@ -50,7 +48,7 @@ function Navbar() {
     <AppBar className="Navbar" position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <Deblur sx={{ display: { xs: "none", md: "flex" }, mr: 1.5 }} />
           <Typography
             variant="h6"
             noWrap
@@ -69,7 +67,7 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            MY SPACE
+            ORANGETIFY
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -108,7 +106,7 @@ function Navbar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Deblur sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -125,7 +123,7 @@ function Navbar() {
               textDecoration: "none",
             }}
           >
-            MY SPACE
+            ORANGETIFY
           </Typography>
           <Box
             sx={{
@@ -140,7 +138,7 @@ function Navbar() {
                 <IconButton
                   key={page}
                   onClick={() => {
-                    navigate(page.href)
+                    navigate(page.href);
                   }}
                   sx={{
                     my: 2,

@@ -8,14 +8,16 @@ const CategoryInput = ({
   categoryPointsPattern,
   category,
   onEnterValue,
+  disabled,
   removeCategory,
 }) => {
   const [touched, setTouched] = useState({ name: false, points: false });
   return (
     <Card variant="outlined" className="todo-category-container">
-      <Box display="flex" gap={2} my={2}>
+      <Box display="flex" gap={2} my={2} alignItems="center">
         <TextField
           fullWidth
+          disabled={disabled}
           error={touched.name && !categoryNamePattern.test(category.name)}
           value={category.name}
           onInput={() => {
@@ -30,6 +32,7 @@ const CategoryInput = ({
           fullWidth
           error={touched.points && !categoryPointsPattern.test(category.points)}
           value={category.points}
+          disabled={disabled}
           onInput={() => {
             setTouched((prev) => {
               return { ...prev, points: true };
